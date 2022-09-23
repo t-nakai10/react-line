@@ -13,16 +13,13 @@ const Line = () => {
     try {
       const querySnapshot = async () => {
         // await は Promise オブジェクトを返す.
-        const docs = await getDocs(q);
-        const data = [];
-        docs.forEach((doc) => {
-          data.push(doc.data());
-        });
-        setMessages(data);
+        const docSnap = await getDocs(q);
+        setMessages(docSnap.docs.map((doc) => doc.data()));
       };
       querySnapshot();
     } catch (error) {
-      console.log("");
+      console.log("エラー");
+      console.log(error);
     }
   }, []);
 
