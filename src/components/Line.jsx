@@ -1,7 +1,7 @@
 import React, { useEffect, useState } from "react";
 import SignOut from "components/SignOut";
 import { db } from "firebase.js";
-import { collection, getDocs, limit, query } from "firebase/firestore";
+import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 
 const Line = () => {
   const [messages, setMessages] = useState();
@@ -9,7 +9,11 @@ const Line = () => {
   // レンダー結果が決定された後に実行される（副作用を設定できる）
   useEffect(() => {
     // クエリの作成.
-    const q = query(collection(db, "messages"), limit(50));
+    const q = query(
+      collection(db, "messages"),
+      limit(50),
+      orderBy("createdAt")
+    );
     try {
       const querySnapshot = async () => {
         // await は Promise オブジェクトを返す.
