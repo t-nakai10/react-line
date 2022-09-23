@@ -10,20 +10,20 @@ const Line = () => {
   useEffect(() => {
     // クエリの作成.
     const q = query(collection(db, "messages"), limit(50));
-    // const querySnapshot = async () => {
-    //   const docs = await getDocs(q);
-    //   docs.forEach((doc) => {
-    //     console.log(doc.data());
-    //   });
-    // };
-    // querySnapshot();
-    // 実行.
-    // map 使いたいとき.
-    getDocs(q).then((querySnapshot) => {
-      setMessages(querySnapshot.docs.map((doc) => doc.data()));
-    });
-
-    // setMessages(snapShot.docs.map((doc) => doc.data()));
+    try {
+      const querySnapshot = async () => {
+        // await は Promise オブジェクトを返す.
+        const docs = await getDocs(q);
+        const data = [];
+        docs.forEach((doc) => {
+          data.push(doc.data());
+        });
+        setMessages(data);
+      };
+      querySnapshot();
+    } catch (error) {
+      console.log("");
+    }
   }, []);
 
   return (
