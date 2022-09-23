@@ -4,7 +4,7 @@ import { db } from "firebase.js";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
 
 const Line = () => {
-  const [messages, setMessages] = useState();
+  const [messages, setMessages] = useState([]);
   // DBの情報は最初だけでいい, 何回も読み込む必要はないためuseEffectを使用.
   // レンダー結果が決定された後に実行される（副作用を設定できる）
   useEffect(() => {
@@ -14,11 +14,18 @@ const Line = () => {
       limit(50),
       orderBy("createdAt")
     );
+
     try {
       const querySnapshot = async () => {
         // await は Promise オブジェクトを返す.
         const docSnap = await getDocs(q);
-        setMessages(docSnap.docs.map((doc) => doc.data()));
+        setMessages(
+          docSnap.docs.map((doc) => {
+            const data = doc.data();
+            // データにユニークIDがあったため付与しておく.
+            return { ...data, id: doc.id };
+          })
+        );
       };
       querySnapshot();
     } catch (error) {
@@ -29,8 +36,17 @@ const Line = () => {
 
   return (
     <div>
-      {console.log(messages)}
       <SignOut />
+      <div>
+        {messages.map(({ id, text, photoURL, uid }) => (
+          <div key={id}>
+            <div>
+              <img src={photoURL} alt="" />
+              <p>{text}</p>
+            </div>
+          </div>
+        ))}
+      </div>
     </div>
   );
 };
