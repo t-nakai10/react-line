@@ -1,12 +1,18 @@
 import React, { useState } from "react";
 import { db } from "firebase.js";
+import { doc, setDoc } from "firebase/firestore";
 
 const SendMessage = () => {
   const [message, setMessage] = useState("");
 
-  function sendMessage(e) {
+  async function sendMessage(e) {
     // onSubmitでリロードされるが、する必要はない.
     e.preventDefault();
+    // async await で一旦セットする方法をとる.
+    // doc() の第３引数をuid にしたい.
+    await setDoc(doc(db, "messages", "test"), {
+      text: message,
+    });
   }
 
   return (
