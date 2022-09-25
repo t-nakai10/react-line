@@ -1,12 +1,6 @@
 import React, { useState } from "react";
 import { db, auth } from "firebase.js";
-import {
-  addDoc,
-  collection,
-  doc,
-  serverTimestamp,
-  setDoc,
-} from "firebase/firestore";
+import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 
 const SendMessage = () => {
   const [message, setMessage] = useState("");
@@ -19,6 +13,8 @@ const SendMessage = () => {
     const { uid, photoURL } = auth.currentUser;
 
     // setDoc では上書きのため,addDocを使う
+    // addDoc ではそのドキュメントへの参照がないため setDoc を使用する形に修正.
+    // doc() でドキュメントへの参照を生成できる.
     // ドキュメントにランダムIDが付与.
     const docRef = doc(collection(db, "messages"));
     await setDoc(docRef, {
