@@ -1,11 +1,17 @@
 import React, { useState } from "react";
+import { db } from "firebase.js";
 
 const SendMessage = () => {
   const [message, setMessage] = useState("");
 
+  function sendMessage(e) {
+    // onSubmitでリロードされるが、する必要はない.
+    e.preventDefault();
+  }
+
   return (
     <div>
-      <form action="">
+      <form onSubmit={sendMessage}>
         <div>
           <input
             type="text"
