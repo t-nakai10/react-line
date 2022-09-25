@@ -2,6 +2,7 @@ import React, { useEffect, useState } from "react";
 import SignOut from "components/SignOut";
 import { db } from "firebase.js";
 import { collection, getDocs, limit, orderBy, query } from "firebase/firestore";
+import SendMessage from "./SendMessage";
 
 const Line = () => {
   const [messages, setMessages] = useState([]);
@@ -47,6 +48,7 @@ const Line = () => {
           </div>
         ))}
       </div>
+      <SendMessage />
     </div>
   );
 };
