@@ -47,6 +47,7 @@ const Line = () => {
             </div>
           </div>
         ))}
+        <p>データを送信しました！</p>
       </div>
       <SendMessage />
     </div>
