@@ -1,6 +1,12 @@
 import React, { useState } from "react";
 import { db, auth } from "firebase.js";
-import { doc, serverTimestamp, setDoc } from "firebase/firestore";
+import {
+  addDoc,
+  collection,
+  doc,
+  serverTimestamp,
+  setDoc,
+} from "firebase/firestore";
 
 const SendMessage = () => {
   const [message, setMessage] = useState("");
@@ -12,15 +18,15 @@ const SendMessage = () => {
     // auth のカレントユーザーには uid と url のプロパティがある.
     const { uid, photoURL } = auth.currentUser;
 
-    // async await で一旦セットする方法をとる.
-    // doc() の第３引数をuid にしたい → auth.currentUser で解決.
-    await setDoc(doc(db, "messages", uid), {
+    // setDoc では上書きのため,addDocを使う
+    // ドキュメントにランダムIDが付与される.
+    const docRef = collection(db, "messages");
+    await addDoc(docRef, {
       text: message,
       uid: uid,
       photoURL: photoURL,
       createdAt: serverTimestamp(),
     });
-    setMessage("");
   }
 
   return (
