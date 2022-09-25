@@ -19,9 +19,9 @@ const SendMessage = () => {
     const { uid, photoURL } = auth.currentUser;
 
     // setDoc では上書きのため,addDocを使う
-    // ドキュメントにランダムIDが付与される.
-    const docRef = collection(db, "messages");
-    await addDoc(docRef, {
+    // ドキュメントにランダムIDが付与.
+    const docRef = doc(collection(db, "messages"));
+    await setDoc(docRef, {
       text: message,
       uid: uid,
       photoURL: photoURL,
