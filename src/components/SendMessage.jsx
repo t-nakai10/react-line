@@ -23,6 +23,7 @@ const SendMessage = () => {
       photoURL: photoURL,
       createdAt: serverTimestamp(),
     });
+    setMessage("");
   }
 
   return (
@@ -33,6 +34,7 @@ const SendMessage = () => {
             type="text"
             placeholder="メッセージを入力してください"
             onChange={(e) => setMessage(e.target.value)}
+            value={message}
           />
         </div>
       </form>
