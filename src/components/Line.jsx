@@ -8,16 +8,18 @@ const Line = () => {
   const [messages, setMessages] = useState([]);
   // DBの情報は最初だけでいい, 何回も読み込む必要はないためuseEffectを使用.
   // レンダー結果が決定された後に実行される（副作用を設定できる）
+  // @todo リロードなしで更新したいが、方法がわからないため後から対応する。
+  //       予想: 第２引数にデータを入れると良さそう。
   useEffect(() => {
     // クエリの作成.
-    const q = query(
-      collection(db, "messages"),
-      limit(50),
-      orderBy("createdAt")
-    );
+    async function querySnapshot() {
+      const q = query(
+        collection(db, "messages"),
+        limit(50),
+        orderBy("createdAt")
+      );
 
-    try {
-      const querySnapshot = async () => {
+      try {
         // await は Promise オブジェクトを返す.
         const docSnap = await getDocs(q);
         setMessages(
@@ -27,19 +29,19 @@ const Line = () => {
             return { ...data, id: doc.id };
           })
         );
-      };
-      querySnapshot();
-    } catch (error) {
-      console.log("エラー");
-      console.log(error);
+      } catch (error) {
+        console.log("エラー");
+        console.log(error);
+      }
     }
+    querySnapshot();
   }, []);
 
   return (
     <div>
       <SignOut />
       <div>
-        {messages.map(({ id, text, photoURL, uid }) => (
+        {messages.map(({ id, text, photoURL }) => (
           <div key={id}>
             <div>
               <img src={photoURL} alt="" />
