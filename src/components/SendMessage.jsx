@@ -5,7 +5,7 @@ import { collection, doc, serverTimestamp, setDoc } from "firebase/firestore";
 const SendMessage = () => {
   const [message, setMessage] = useState("");
 
-  async function sendMessage(e) {
+  const sendLineMessage = async (e) => {
     // onSubmitでリロードされるが、する必要はない.
     e.preventDefault();
 
@@ -17,18 +17,23 @@ const SendMessage = () => {
     // doc() でドキュメントへの参照を生成できる.
     // ドキュメントにランダムIDが付与.
     const docRef = doc(collection(db, "messages"));
-    await setDoc(docRef, {
-      text: message,
-      uid: uid,
-      photoURL: photoURL,
-      createdAt: serverTimestamp(),
-    });
-    setMessage("");
-  }
+
+    try {
+      await setDoc(docRef, {
+        text: message,
+        uid: uid,
+        photoURL: photoURL,
+        createdAt: serverTimestamp(),
+      });
+      setMessage("");
+    } catch (error) {
+      console.log(error);
+    }
+  };
 
   return (
     <div>
-      <form onSubmit={sendMessage}>
+      <form onSubmit={sendLineMessage}>
         <div>
           <input
             type="text"
